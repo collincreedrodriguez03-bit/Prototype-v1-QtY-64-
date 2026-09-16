@@ -1,0 +1,7 @@
+{
+  "name": "QtY 64",
+  "description": "Quantitative BTC signal engine foundation for 15-minute Kalshi contracts",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
