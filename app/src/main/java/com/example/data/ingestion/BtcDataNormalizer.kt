@@ -15,14 +15,15 @@ class DefaultBtcDataNormalizer : BtcDataNormalizer {
   ): BtcMarketObservation {
     val quality = when {
       exchangeTimestampMs <= 0 || receiptTimestampMs <= 0 -> DataQualityGrade.MALFORMED
-      price <= 0.0 -> DataQualityGrade.MALFORMED
+      price.isNaN() || price.isInfinite() || price <= 0.0 -> DataQualityGrade.MALFORMED
       exchangeTimestampMs > receiptTimestampMs + 5000L -> DataQualityGrade.OUT_OF_ORDER
       else -> DataQualityGrade.VALID
     }
 
     return BtcMarketObservation(
       timestampMs = exchangeTimestampMs,
-      price = price,
+      receiptTimestampMs = receiptTimestampMs,
+      price = if (quality.isUsable) price else 1.0, // fallback dummy price for construction if malformed, but qualityStatus is MALFORMED
       volume = volume,
       bidPrice = bidPrice,
       askPrice = askPrice,

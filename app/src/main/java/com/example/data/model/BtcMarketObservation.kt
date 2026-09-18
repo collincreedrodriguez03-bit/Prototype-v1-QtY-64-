@@ -7,6 +7,7 @@ package com.example.data.model
  */
 data class BtcMarketObservation(
   val timestampMs: Long,
+  val receiptTimestampMs: Long = timestampMs,
   val price: Double,
   val volume: Double? = null,
   val bidPrice: Double? = null,
@@ -15,8 +16,9 @@ data class BtcMarketObservation(
 ) {
   init {
     require(timestampMs > 0) { "Observation timestamp must be positive" }
+    require(receiptTimestampMs > 0) { "Receipt timestamp must be positive" }
     if (qualityStatus == DataQualityGrade.VALID) {
-      require(price > 0.0) { "BTC price must be strictly positive for valid observations" }
+      require(price > 0.0 && !price.isNaN() && !price.isInfinite()) { "BTC price must be strictly positive and finite for valid observations" }
     }
     if (volume != null) {
       require(volume >= 0.0) { "Volume cannot be negative (malformed observation)" }

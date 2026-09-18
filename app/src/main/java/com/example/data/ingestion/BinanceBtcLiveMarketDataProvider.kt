@@ -78,7 +78,7 @@ class BinanceBtcLiveMarketDataProvider(
     try {
       val payload = adapter.fromJson(jsonText)
       if (payload != null && payload.priceString != null && payload.eventTimeMs != null) {
-        val price = payload.priceString.toDoubleOrNull() ?: 0.0
+        val price = payload.priceString.toDoubleOrNull() ?: Double.NaN
         val volume = payload.quantityString?.toDoubleOrNull()
         val exchangeTime = payload.eventTimeMs
 
